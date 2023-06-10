@@ -44,18 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_170439) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "vending_snacks", force: :cascade do |t|
-    t.bigint "snack_id", null: false
-    t.bigint "machine_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["machine_id"], name: "index_vending_snacks_on_machine_id"
-    t.index ["snack_id"], name: "index_vending_snacks_on_snack_id"
-  end
-
   add_foreign_key "machine_snacks", "machines"
   add_foreign_key "machine_snacks", "snacks"
   add_foreign_key "machines", "owners"
-  add_foreign_key "vending_snacks", "machines"
-  add_foreign_key "vending_snacks", "snacks"
 end
