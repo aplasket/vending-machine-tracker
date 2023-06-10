@@ -8,3 +8,11 @@
   <% end %>
 </ul>
 <p><b>Average Price:</b> $<%= @machine.average_snack_price %></p>
+
+<h3>Add a Snack</h3>
+<%= form_with url: "/machines/#{@machine.id}/snacks", method: :post, local: true do |f| %>
+  <%= f.label :snack_id, "Snack ID" %>
+  <%= f.number_field :snack_id %>
+
+  <%= f.submit "Submit" %>
+<% end %>

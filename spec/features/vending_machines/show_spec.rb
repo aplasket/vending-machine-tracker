@@ -9,7 +9,8 @@ RSpec.describe 'When a user visits a vending machine show page', type: :feature 
 
     expect(page).to have_content("Don's Mixed Drinks Vending Machine")
   end
-  describe "userstory 1" do
+
+  describe "userstories" do
     let!(:owner) { Owner.create(name: "Sam's Snacks") }
     let!(:dons)  { owner.machines.create!(location: "Don's Mixed Drinks") }
     let!(:freddies) { owner.machines.create!(location: "Freddies Mixed Snacks") }
@@ -20,6 +21,10 @@ RSpec.describe 'When a user visits a vending machine show page', type: :feature 
 
     let!(:apple) { freddies.snacks.create!(name: "Apple", price: 1.00) }
 
+    let!(:gushers) { Snack.create!(name: "Gushers", price: 2.00) }
+    let!(:fruit_rollups) { Snack.create!(name: "Fruit Rollups", price: 3.25) }
+
+    #userstory 1
     it "displays all snacks and their associated price" do
       visit machine_path(dons)
 
@@ -47,8 +52,28 @@ RSpec.describe 'When a user visits a vending machine show page', type: :feature 
 
     it "shows the average price for all of the snacks in that machine" do
       visit machine_path(dons)
-      
+
       expect(page).to have_content("Average Price: $2.5")
+    end
+
+    #userstory 2
+    it "has a form to add a snack to that vending machine" do
+      visit machine_path(dons)
+
+      expect(page).to_not have_content(gushers.name)
+      expect(page).to have_content("Add a Snack")
+
+      fill_in "Snack ID", with: "#{gushers.id}"
+      click_button "Submit"
+
+      expect(current_path).to eq(machine_path(dons))
+
+      within "#snack-#{gushers.id}" do
+        expect(page).to have_content(gushers.name)
+        expect(page).to have_content(gushers.price)
+      end
+
+      expect(page).to_not have_content(fruit_rollups.name)
     end
   end
 end
